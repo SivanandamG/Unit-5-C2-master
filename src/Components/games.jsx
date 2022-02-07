@@ -116,7 +116,7 @@ export default function Games(){
 
                </form>
           
-               <input style={{marginLeft:"80%"}} value={search} onChange={()=>{setSeaarch(search),searchbox}} id="searchbox" type="text"  placeholder="search for a game"/><br /><br />
+               <input style={{marginLeft:"80%"}} value={search} onChange={searchbox} id="searchbox" type="text"  placeholder="search for a game"/><br /><br />
           <table id="table">
                <thead>
                     <tr>
