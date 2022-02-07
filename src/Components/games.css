@@ -1,0 +1,32 @@
+body{
+     background: linear-gradient( #33ccff 0%, #ff99cc 100%);
+}
+
+
+form{
+     background-color: rgb(215, 250, 241);
+     width: auto;
+     padding-left: 5%;
+     margin-top: 50px;
+}
+
+button,form:nth-child(6){
+ background-color: aquamarine;    
+}
+
+     td{
+          border: 1px black solid;
+          margin-left: 5px;
+     }
+     
+     table{
+          border:1px black solid;
+          margin: auto;
+          background-color: antiquewhite;
+          width: 60%;
+          text-align: right;
+     }
+     table thead td{
+          background-color: rgb(187, 250, 168);
+          font-weight: bold;
+     }
