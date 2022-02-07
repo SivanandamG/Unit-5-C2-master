@@ -8,6 +8,7 @@ export default function Games(){
   const [games,setGames] = useState([]);
   const [data,setData] = useState({gamename:"",gameauthor:"",gametags:"",gameprice:"",forkids:false,gamedesc:"",gamerating:5})
   const [search,setSeaarch] = useState("");
+  const [issort,setissort] = useState(true);
   useEffect(()=>{
      getData();
   },[]);
@@ -17,9 +18,7 @@ export default function Games(){
        setSeaarch(e.target.value);
        fetch("http://localhost:3001/games")
        .then(d=>d.json())
-       .then((res)=>{setGames(res.map((a)=>{if(a.gamename.startsWith(search)){
-            return a;
-       }else{return}}))});
+       .then((res)=>{setGames(res.filter((a)=>{return a.gamename.startsWith(search)}))});
 
   }
 
@@ -31,7 +30,18 @@ export default function Games(){
   const getData = ()=>{
      fetch("http://localhost:3001/games")
      .then(d=>d.json())
-     .then((res)=>{setGames(res)});
+     .then((res)=>{setGames(res.sort(
+     function(a, b) {
+          var nameA = a.gamename.toUpperCase(); 
+          var nameB = b.gamename.toUpperCase(); 
+          if (nameA < nameB) {
+            return -1;
+          }
+          if (nameA > nameB) {
+            return 1; 
+          }
+          return 0; 
+        }))});
   }
 
   const setdata = ()=>{
@@ -54,12 +64,12 @@ export default function Games(){
   const sortbyrating = ()=>{
           fetch("http://localhost:3001/games")
           .then(d=>d.json())
-          .then((res)=>{setGames(res.sort((a,b)=>{return a.gamerating-b.gamerating}))});
-  }
+          .then((res)=>{if(!issort){setGames(res.sort((a,b)=>{return a.gamerating-b.gamerating}))}else{setGames(res.sort((a,b)=>{return b.gamerating-a.gamerating}))}setissort(!issort)});
+     }
   const sortbyprice = ()=>{
      fetch("http://localhost:3001/games")
      .then(d=>d.json())
-     .then((res)=>{setGames(res.sort((a,b)=>{return a.gameprice-b.gameprice}))});
+     .then((res)=>{if(!issort){setGames(res.sort((a,b)=>{return a.gameprice-b.gameprice}))}else{setGames(res.sort((a,b)=>{return b.gameprice-a.gameprice}))}setissort(!issort)});
   }
   const sortbyname = ()=>{
      fetch("http://localhost:3001/games")
@@ -79,28 +89,21 @@ export default function Games(){
   }
 
   return <div >
+       <h1>hello world</h1>
           <form onSubmit={setdata} id="addgame">
-       <h1>Games Management</h1>
        
-               <label htmlFor="gamename">gamename:</label>
                <input onChange={handlechange} name="gamename" type="text" placeholder="gamename" />
 
-               <label htmlFor="gameauthor">gameauthor:</label>
                <input onChange={handlechange} name="gameauthor" type="text" placeholder="gameauthor" />
 
-               <label htmlFor="gametags">gametags:</label>
                <input onChange={handlechange}name="gametags" type="text"  placeholder="gametags"/>
 
-               <label htmlFor="gameprice">gameprice:</label>
                <input onChange={handlechange}name="gameprice" type="number"  placeholder="gameprice"/>
 
-               <label htmlFor="checkbox">forkids:</label>
                <input type="checkbox" onClick={handlechange}name="forkids" id=""/>
 
-               <label htmlFor="gamedesc">gamedesc:</label>
                <textarea onChange={handlechange}name="gamedesc" id="" cols="20" rows="5" placeholder="game decription"></textarea>
                
-               <label htmlFor="gamerating">gamerating:</label>
                <select onChange={handlechange}name="gamerating" id="" placeholder="rate game">
                <option value={1}>1</option>
                <option value={2}>2</option>
@@ -113,7 +116,7 @@ export default function Games(){
 
                </form>
           
-               <input style={{marginLeft:"80%"}} value={search} onChange={searchbox} id="searchbox" type="text"  placeholder="search for a game"/><br /><br />
+               <input style={{marginLeft:"80%"}} value={search} onChange={()=>{setSeaarch(search),searchbox}} id="searchbox" type="text"  placeholder="search for a game"/><br /><br />
           <table id="table">
                <thead>
                     <tr>
